@@ -1,14 +1,14 @@
 <template>
-  <div class="movie-card">
+  <div class="movie-card" @click="handleClick(movie.id)">
     <div class="movie-card-inner">
       <div class="movie-card-front">
-        <img :src="posterUrl" :alt="movie.title" />
+        <img :src="posterUrl" :alt="movie.title">
       </div>
       <div class="movie-card-back">
         <div class="content">
-          <h2>{{ movie.title }} ({{ releaseYear }})</h2>
+          <h3>{{ movie.title }} ({{ releaseYear }})</h3>
           <p class="details">
-            Genres: Romance, Drama | Rating: ⭐ {{ movie.vote_average }}
+            Genres: {{ genreNames.join(', ') }} | Rating: ⭐ {{ movie.vote_average }}
           </p>
           <p class="overview">{{ movie.overview }}</p>
         </div>
@@ -19,6 +19,8 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+
 const props = defineProps({
   movie: {
     type: Object,
@@ -26,9 +28,43 @@ const props = defineProps({
   }
 })
 
+const genres = [
+  { id: 28, name: "Action" },
+  { id: 12, name: "Abenteuer" },
+  { id: 16, name: "Animation" },
+  { id: 35, name: "Komödie" },
+  { id: 80, name: "Krimi" },
+  { id: 99, name: "Dokumentarfilm" },
+  { id: 18, name: "Drama" },
+  { id: 10751, name: "Familie" },
+  { id: 14, name: "Fantasy" },
+  { id: 36, name: "Historie" },
+  { id: 27, name: "Horror" },
+  { id: 10402, name: "Musik" },
+  { id: 9648, name: "Mystery" },
+  { id: 10749, name: "Liebesfilm" },
+  { id: 878, name: "Science Fiction" },
+  { id: 10770, name: "TV-Film" },
+  { id: 53, name: "Thriller" },
+  { id: 10752, name: "Kriegsfilm" },
+  { id: 37, name: "Western" }
+];
+
+const genreNames = computed(() =>
+    (props.movie.genre_ids || [])
+        .map(id => genres.find(g => g.id === id)?.name)
+        .filter(Boolean)
+)
+
 
 const posterUrl = `https://image.tmdb.org/t/p/w342${props.movie.poster_path}`;
 const releaseYear = props.movie.release_date.split("-")[0];
+
+
+const router = useRouter()
+const handleClick = (id) => {
+  router.push(`/movies/${id}`)
+}
 </script>
 
 
@@ -41,6 +77,7 @@ const releaseYear = props.movie.release_date.split("-")[0];
   color: white;
   aspect-ratio: 2 / 3;
   perspective: 1000px;
+  cursor: pointer;
 }
 img {
   width: 100%;
@@ -48,9 +85,16 @@ img {
 .content {
   padding: 1rem;
 }
+
 .overview {
   color: #ccc;
   font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+
 }
 
 .movie-card-inner {
@@ -90,7 +134,6 @@ img {
   background: #1e1e1e;
   color: #fff;
   transform: rotateY(180deg);
-  padding: 16px;
   box-sizing: border-box;
   text-align: center;
 }
