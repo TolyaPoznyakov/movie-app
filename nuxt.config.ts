@@ -9,6 +9,7 @@ export default defineNuxtConfig({
       apiToken: process.env.API_KEY,
     }
   },
+	css: ['~/assets/css/main.css'],
   modules: [
     '@nuxt/content',
     '@nuxt/eslint',
