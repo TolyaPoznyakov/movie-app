@@ -1,6 +1,6 @@
 <template>
 <div>
-  <nuxt-link class="main-btn" to="/">MAIN PAGE</nuxt-link>
+  <nuxt-link class="main-btn hover:scale-105" to="/">MAIN PAGE</nuxt-link>
 </div>
 </template>
 
@@ -21,7 +21,7 @@ div  {
 
 .main-btn  {
   text-decoration: none;
-  color: #490000;
+  color: #a10000;
   font-size: 30px;
   font-family: Impact, fantasy;
   letter-spacing: 2px;
@@ -29,7 +29,7 @@ div  {
 }
 
 .main-btn:hover {
-  color: #a10000;
+  color: #490000;
 }
 
 </style>

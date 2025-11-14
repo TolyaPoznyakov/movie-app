@@ -1,5 +1,6 @@
 <template>
   <div>
+    <back-button/>
     <movie-description
         v-if="moviesDetails" :movie="moviesDetails"
     />
