@@ -1,50 +1,48 @@
 <template>
-<div class="w-full px-4">
-  <div class="w-full flex justify-center pb-10 gap-4">
-    <AppInput
+  <div class="w-full px-4">
+    <div class="w-full flex justify-center pb-10 gap-4">
+      <AppInput
         v-model="search"
         class="w-lg h-10"
         placeholder="Search movies..."
         size="xl"
+      />
+    </div>
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
+      <MovieCard
+        v-for="movie in moviesList"
+        :key="movie.id"
+        :movie="movie"
+      />
+    </div>
+    <base-pagination
+      :page="page"
+      :total-pages="totalPages"
+      @next="nextPage"
+      @prev="prevPage"
     />
   </div>
-  <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
-  <MovieCard
-      v-for="movie in moviesList"
-      :key="movie.id"
-      :movie="movie"
-  />
-  </div>
-  <base-pagination
-  :page="page"
-  :total-pages="totalPages"
-  @next="nextPage"
-  @prev="prevPage"
-  />
-</div>
 </template>
 
-
 <script setup>
-import {useApiRequest} from "~/composables/apiRequest.js";
-import {debounce} from "~/utils/debounce.js";
-
+import { useApiRequest } from '~/composables/apiRequest.js'
+import { debounce } from '~/utils/debounce.js'
 
 const moviesInCinema = ref(null)
-const movies = ref(null);
-const search = ref('');
-const page = ref(1);
-const totalPages = ref(1);
+const movies = ref(null)
+const search = ref('')
+const page = ref(1)
+const totalPages = ref(1)
 
 const moviesList = computed(() => search.value ? movies.value : moviesInCinema.value)
 
-const fetchMovies = async ()=>{
+const fetchMovies = async () => {
   const res = await useApiRequest('/movie/now_playing', {
     query: {
       page: page.value
     }
   })
-  moviesInCinema.value = res.data.value.results;
+  moviesInCinema.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
 }
 
@@ -62,18 +60,18 @@ const searchMovies = async () => {
     return
   }
 
-  movies.value = res.data.value.results;
+  movies.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
 }
 
 const debouncedSearch = debounce(searchMovies, 800)
 
 watch(search, () => {
-  page.value = 1;
+  page.value = 1
   debouncedSearch()
 })
 
-onMounted(()=>{
+onMounted(() => {
   fetchMovies()
 })
 
@@ -96,7 +94,6 @@ const updateMovies = async () => {
   else await fetchMovies()
 }
 </script>
-
 
 <style scoped>
 
