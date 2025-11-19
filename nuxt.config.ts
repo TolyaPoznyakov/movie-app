@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from "@tailwindcss/vite";
+import tailwindcss from "@tailwindcss/vite"
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -7,16 +7,16 @@ export default defineNuxtConfig({
   ssr: false,
   vite: {
     plugins: [
-      tailwindcss(),
-    ],
+      tailwindcss()
+    ]
   },
   runtimeConfig:  {
     public: {
       apiUrl: process.env.API_URL,
-      apiToken: process.env.API_KEY,
+      apiToken: process.env.API_KEY
     }
   },
-	css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css'],
   modules: [
     '@nuxt/content',
     '@nuxt/eslint',
@@ -25,5 +25,6 @@ export default defineNuxtConfig({
     '@nuxt/test-utils',
     '@nuxt/ui'
   ]
+
 })
 

@@ -7,7 +7,7 @@
 
 
 <script setup lang="ts">
-import AppHeader from "~/layouts/includes/app-header.vue";;
+import AppHeader from "~/layouts/includes/app-header.vue"
 
 </script>
 

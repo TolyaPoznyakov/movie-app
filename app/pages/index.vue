@@ -16,25 +16,28 @@
   />
   </div>
   <base-pagination
-  :page="page"
-  :total-pages="totalPages"
-  @next="nextPage"
-  @prev="prevPage"
+      :page="page"
+      :total-pages="totalPages"
+      :total-movies="totalMovies"
+      :items-per-page="itemsPerPage"
+      @next="nextPage"
+      @prev="prevPage"
   />
 </div>
 </template>
 
 
 <script setup>
-import {useApiRequest} from "~/composables/apiRequest.js";
-import {debounce} from "~/utils/debounce.js";
-
+import { useApiRequest } from "~/composables/apiRequest.js"
+import { debounce } from "~/utils/debounce.js"
 
 const moviesInCinema = ref(null)
-const movies = ref(null);
-const search = ref('');
-const page = ref(1);
-const totalPages = ref(1);
+const movies = ref(null)
+const search = ref('')
+const page = ref(1)
+const totalPages = ref(1)
+const totalMovies = ref(1)
+const itemsPerPage = 20
 
 const moviesList = computed(() => search.value ? movies.value : moviesInCinema.value)
 
@@ -44,8 +47,9 @@ const fetchMovies = async ()=>{
       page: page.value
     }
   })
-  moviesInCinema.value = res.data.value.results;
+  moviesInCinema.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
+  totalMovies.value = res.data.value.total_results
 }
 
 const searchMovies = async () => {
@@ -62,14 +66,15 @@ const searchMovies = async () => {
     return
   }
 
-  movies.value = res.data.value.results;
+  movies.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
+  totalMovies.value = res.data.value.total_results
 }
 
 const debouncedSearch = debounce(searchMovies, 800)
 
 watch(search, () => {
-  page.value = 1;
+  page.value = 1
   debouncedSearch()
 })
 

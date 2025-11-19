@@ -1,6 +1,6 @@
 <template>
   <UButton
-      class="text-[#222] hover:bg-transparent hover:text-[#a10000] active:bg-transparent hover:scale-110 cursor-pointer ml-64"
+      class="text-[#222] hover:bg-transparent hover:text-[#a10000] active:bg-transparent hover:scale-110 cursor-pointer"
       variant="ghost"
       icon="i-heroicons-arrow-uturn-left"
       @click="goBack"
