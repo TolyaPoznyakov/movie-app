@@ -1,6 +1,16 @@
 <template>
   <div class="w-full px-4">
     <div class="w-full flex justify-center pb-10 gap-4">
+      <USelect
+        v-if="movieGenres.length > 0"
+        v-model="selectedGenres"
+        :items="movieGenres"
+        multiple
+        placeholder="Select genre"
+        value-key="id"
+        label-key="name"
+        class="w-[150px]"
+      />
       <AppInput
         v-model="search"
         class="w-lg h-10"
@@ -27,19 +37,25 @@
 <script setup>
 import { useApiRequest } from '~/composables/apiRequest.js'
 import { debounce } from '~/utils/debounce.js'
+import { useMovieGenres } from '~/composables/genres.js'
+
+const { fetchGenres } = useMovieGenres()
 
 const moviesInCinema = ref(null)
 const movies = ref(null)
 const search = ref('')
 const page = ref(1)
 const totalPages = ref(1)
+const movieGenres = ref([])
+const selectedGenres = ref([])
 
 const moviesList = computed(() => search.value ? movies.value : moviesInCinema.value)
 
 const fetchMovies = async () => {
-  const res = await useApiRequest('/movie/now_playing', {
+  const res = await useApiRequest('/discover/movie', {
     query: {
-      page: page.value
+      page: page.value,
+      with_genres: selectedGenres.value.join(',')
     }
   })
   moviesInCinema.value = res.data.value.results
@@ -71,8 +87,13 @@ watch(search, () => {
   debouncedSearch()
 })
 
-onMounted(() => {
-  fetchMovies()
+watch(selectedGenres, async () => {
+  await fetchMovies()
+})
+// TODO: have a look of ASYNC hooks call
+onMounted(async () => {
+  await fetchMovies()
+  movieGenres.value = await fetchGenres()
 })
 
 const nextPage = async () => {
