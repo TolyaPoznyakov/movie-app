@@ -16,17 +16,17 @@
         class="w-lg h-10"
         placeholder="Search movies..."
         size="xl"
-    />
-  </div>
-  <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
-  <MovieCard
-      v-for="movie in moviesList"
-      :key="movie.id"
-      :movie="movie"
-      @click="handleClick(movie.id, 'movie')"
-  />
-  </div>
-  <base-pagination
+      />
+    </div>
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
+      <MovieCard
+        v-for="movie in moviesList"
+        :key="movie.id"
+        :movie="movie"
+        @click="handleClick(movie.id, 'movie')"
+      />
+    </div>
+    <base-pagination
       :page="page"
       :total-pages="totalPages"
       :total-movies="totalMovies"
@@ -54,11 +54,11 @@ const selectedGenres = ref([])
 const totalMovies = ref(1)
 const itemsPerPage = 20
 
-
 const handleClick = (id, type) => {
   if (type === 'movie') {
     navigateTo(`/movies/${id}`)
-  } else if (type === 'tv') {
+  }
+  else if (type === 'tv') {
     navigateTo(`/tv-series/${id}`)
   }
 }
