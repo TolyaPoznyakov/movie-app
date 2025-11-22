@@ -1,12 +1,12 @@
 <template>
-  <div class="movie-card" @click="handleClick(movie.id)">
+  <div class="movie-card" @click="emit('click')">
     <div class="movie-card-inner">
       <div class="movie-card-front">
-        <img :src="posterUrl" :alt="movie.title">
+        <img :src="posterUrl" :alt="movie.title || movie.name">
       </div>
       <div class="movie-card-back">
         <div class="content">
-          <h3>{{ movie.title }} ({{ releaseYear }})</h3>
+          <h3>{{ movie.title || movie.name }} ({{ releaseYear }})</h3>
           <p class="details">
             Genres: {{ genreNames.join(', ') }} | Rating: ⭐ {{ movie.vote_average }}
           </p>
@@ -19,7 +19,6 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
 
 
 const props = defineProps({
@@ -59,13 +58,26 @@ const genreNames = computed(() =>
 
 
 const posterUrl = `https://image.tmdb.org/t/p/w342${props.movie.poster_path}`
-const releaseYear = props.movie.release_date.split("-")[0]
+const releaseYear = (props.movie.release_date || props.movie.first_air_date)?.split("-")[0] || ''
 
 
-const router = useRouter()
-const handleClick = (id) => {
-  router.push(`/movies/${id}`)
-}
+//
+// const router = useRouter()
+//
+// const handleClick = (id) => {
+//   router.push(`/movies/${id}`)
+// }
+//
+// const handleClick = (id, type) => {
+//   if(type === 'movie') {
+//     router.push(`/movies/${id}`)
+//   } else if(type === 'tv') {
+//     router.push(`/tv-series/${id}`)
+//   }
+// }
+//
+const emit = defineEmits(['click'])
+
 
 </script>
 

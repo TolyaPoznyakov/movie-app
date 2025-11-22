@@ -1,6 +1,6 @@
 <template>
   <div class="movie">
-    <h1>{{ movie.title }}</h1>
+    <h1 class="text-2xl font-bold">{{ title }}</h1>
     <p class="tagline">{{ movie.tagline }}</p>
 
     <div class="poster">
@@ -8,11 +8,11 @@
     </div>
 
     <ul class="info">
-      <li><strong>Оригінальна назва:</strong> {{ movie.original_title }}</li>
-      <li><strong>Мова:</strong> {{ movie.original_language.toUpperCase() }}</li>
+      <li><strong>Оригінальна назва:</strong> {{ originalTitle }}</li>
+      <li><strong>Мова:</strong> {{ language }}</li>
       <li><strong>Жанри:</strong> {{ genres }}</li>
-      <li><strong>Тривалість:</strong> {{ movie.runtime }} хв</li>
-      <li><strong>Дата релізу:</strong> {{ movie.release_date }}</li>
+      <li><strong>Тривалість:</strong> {{ runtime }} хв</li>
+      <li><strong>Дата релізу:</strong> {{ releaseDate }}</li>
       <li><strong>Бюджет:</strong> ${{ formatNumber(movie.budget) }}</li>
       <li><strong>Касові збори:</strong> ${{ formatNumber(movie.revenue) }}</li>
       <li><strong>Рейтинг:</strong> {{ movie.vote_average }} ({{ movie.vote_count }} голосів)</li>
@@ -54,12 +54,16 @@ const props = defineProps({
   }
 })
 
-
+const title = computed(() => props.movie.title || props.movie.name || 'N/A')
+const originalTitle = computed(() => props.movie.original_title || props.movie.original_name || 'N/A')
+const releaseDate = computed(() => props.movie.release_date || props.movie.first_air_date || 'N/A')
+const runtime = computed(() => props.movie.runtime || props.movie.episode_run_time?.[0] || 'N/A')
+const language = computed(() => (props.movie.original_language || props.movie.languages?.[0] || '').toUpperCase())
 const genres = computed(() => props.movie.genres.map(g => g.name).join(', '))
 
 const imageUrl = (path) => path ? `https://image.tmdb.org/t/p/w500${path}` : ''
 
-const formatNumber = (num) => num.toLocaleString('en-US')
+const formatNumber = (num) => num ? num.toLocaleString('en-US') : 'N/A'
 
 </script>
 

@@ -2,18 +2,19 @@
 <div class="w-full px-4">
   <div class="w-full flex justify-center pb-10 gap-4">
     <AppInput
-        v-model="search"
-        class="w-lg h-10"
-        placeholder="Search movies..."
-        size="xl"
+      v-model="search"
+      class="w-lg h-10"
+      placeholder="Search movies..."
+      size="xl"
     />
   </div>
+
   <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
-  <MovieCard
-      v-for="movie in moviesList"
-      :key="movie.id"
-      :movie="movie"
-      @click="handleClick(movie.id, 'movie')"
+  <movie-card
+      v-for="item in moviesList"
+      :key="item.id"
+      :movie="item"
+      @click="handleClick(item.id, 'tv')"
   />
   </div>
   <base-pagination
@@ -32,13 +33,15 @@
 import { useApiRequest } from "~/composables/apiRequest.js"
 import { debounce } from "~/utils/debounce.js"
 
-const moviesInCinema = ref(null)
-const movies = ref(null)
+const tvAndSeries = ref(null)
+
+const series = ref(null)
 const search = ref('')
 const page = ref(1)
 const totalPages = ref(1)
 const totalMovies = ref(1)
 const itemsPerPage = 20
+
 
 
 const handleClick = (id, type) => {
@@ -49,23 +52,29 @@ const handleClick = (id, type) => {
   }
 }
 
-const moviesList = computed(() => search.value ? movies.value : moviesInCinema.value)
 
-const fetchMovies = async ()=>{
-  const res = await useApiRequest('/movie/now_playing', {
+
+
+const moviesList = computed(() => search.value ? series.value : tvAndSeries.value)
+
+const fetchTvAndSeries = async ()=>{
+  const res = await useApiRequest('/discover/tv', {
     query: {
       page: page.value
     }
   })
-  moviesInCinema.value = res.data.value.results
+  tvAndSeries.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
   totalMovies.value = res.data.value.total_results
 }
 
-const searchMovies = async () => {
+
+
+
+const searchTvAndSeries = async () => {
   if (!search.value) return
 
-  const res = await useApiRequest('/search/movie', {
+  const res = await useApiRequest('/search/tv', {
     query: {
       query: search.value,
       page: page.value
@@ -76,12 +85,12 @@ const searchMovies = async () => {
     return
   }
 
-  movies.value = res.data.value.results
+  series.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
   totalMovies.value = res.data.value.total_results
 }
 
-const debouncedSearch = debounce(searchMovies, 800)
+const debouncedSearch = debounce(searchTvAndSeries, 800)
 
 watch(search, () => {
   page.value = 1
@@ -89,7 +98,7 @@ watch(search, () => {
 })
 
 onMounted(()=>{
-  fetchMovies()
+  fetchTvAndSeries()
 })
 
 const nextPage = async () => {
@@ -107,9 +116,10 @@ const prevPage = async () => {
 }
 
 const updateMovies = async () => {
-  if (search.value) await searchMovies()
-  else await fetchMovies()
+  if (search.value) await searchTvAndSeries()
+  else await fetchTvAndSeries()
 }
+
 </script>
 
 
