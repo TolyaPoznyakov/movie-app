@@ -49,17 +49,17 @@ const genres = [
   { id: 53, name: "Thriller" },
   { id: 10752, name: "Kriegsfilm" },
   { id: 37, name: "Western" }
-];
+]
 
 const genreNames = computed(() =>
-    (props.movie.genre_ids || [])
-        .map(id => genres.find(g => g.id === id)?.name)
-        .filter(Boolean)
+  (props.movie.genre_ids || [])
+    .map(id => genres.find(g => g.id === id)?.name)
+    .filter(Boolean)
 )
 
 
-const posterUrl = `https://image.tmdb.org/t/p/w342${props.movie.poster_path}`;
-const releaseYear = props.movie.release_date.split("-")[0];
+const posterUrl = `https://image.tmdb.org/t/p/w342${props.movie.poster_path}`
+const releaseYear = props.movie.release_date.split("-")[0]
 
 
 const router = useRouter()

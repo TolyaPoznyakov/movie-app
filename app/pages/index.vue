@@ -28,6 +28,8 @@
     <base-pagination
       :page="page"
       :total-pages="totalPages"
+      :total-movies="totalMovies"
+      :items-per-page="itemsPerPage"
       @next="nextPage"
       @prev="prevPage"
     />
@@ -48,6 +50,8 @@ const page = ref(1)
 const totalPages = ref(1)
 const movieGenres = ref([])
 const selectedGenres = ref([])
+const totalMovies = ref(1)
+const itemsPerPage = 20
 
 const moviesList = computed(() => search.value ? movies.value : moviesInCinema.value)
 
@@ -60,6 +64,7 @@ const fetchMovies = async () => {
   })
   moviesInCinema.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
+  totalMovies.value = res.data.value.total_results
 }
 
 const searchMovies = async () => {
@@ -78,6 +83,7 @@ const searchMovies = async () => {
 
   movies.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
+  totalMovies.value = res.data.value.total_results
 }
 
 const debouncedSearch = debounce(searchMovies, 800)
