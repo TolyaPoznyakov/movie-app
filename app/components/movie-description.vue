@@ -11,8 +11,8 @@
         <li><strong>Жанри:</strong> {{ genres }}</li>
         <li><strong>Тривалість:</strong> {{ runtime }} хв</li>
         <li><strong>Дата релізу:</strong> {{ releaseDate }}</li>
-        <li><strong>Бюджет:</strong> ${{ formatNumber(movie.budget) }}</li>
-        <li><strong>Касові збори:</strong> ${{ formatNumber(movie.revenue) }}</li>
+        <li v-if="movie.budget"><strong>Бюджет:</strong> ${{ formatNumber(movie.budget) }}</li>
+        <li v-if="movie.revenue"><strong>Касові збори:</strong> ${{ formatNumber(movie.revenue) }}</li>
         <li><strong>Рейтинг:</strong> {{ movie.vote_average }} ({{ movie.vote_count }} голосів)</li>
         <li><strong>Статус:</strong> {{ movie.status }}</li>
       </ul>

@@ -2,11 +2,11 @@
   <div class="movie-card" @click="emit('click')">
     <div class="movie-card-inner">
       <div class="movie-card-front">
-        <img :src="posterUrl" :alt="movie.title || movie.name">
+        <img :src="posterUrl" :alt="movie.title">
       </div>
       <div class="movie-card-back">
         <div class="content">
-          <h3>{{ movie.title || movie.name }} ({{ releaseYear }})</h3>
+          <h3>{{ movie.title }} ({{ releaseYear }})</h3>
           <p class="details">
             Genres: {{ genreNames.join(', ') }} | Rating: ⭐ {{ movie.vote_average }}
           </p>

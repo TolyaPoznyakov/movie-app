@@ -11,7 +11,7 @@
 
     <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
       <movie-card
-        v-for="item in moviesList"
+        v-for="item in formattedMovieList"
         :key="item.id"
         :movie="item"
         @click="handleClick(item.id, 'tv')"
@@ -32,9 +32,8 @@
 import { useApiRequest } from '~/composables/apiRequest.js'
 import { debounce } from '~/utils/debounce.js'
 
-const tvAndSeries = ref(null)
-
-const series = ref(null)
+const tvSeries = ref([])
+const searchedTvSeries = ref([])
 const search = ref('')
 const page = ref(1)
 const totalPages = ref(1)
@@ -50,7 +49,9 @@ const handleClick = (id, type) => {
   }
 }
 
-const moviesList = computed(() => search.value ? series.value : tvAndSeries.value)
+const moviesList = computed(() => search.value ? searchedTvSeries.value : tvSeries.value)
+
+const formattedMovieList = computed(() => moviesList.value.map(movie => ({ ...movie, title: movie.name }) ))
 
 const fetchTvAndSeries = async () => {
   const res = await useApiRequest('/discover/tv', {
@@ -58,7 +59,7 @@ const fetchTvAndSeries = async () => {
       page: page.value
     }
   })
-  tvAndSeries.value = res.data.value.results
+  tvSeries.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
   totalMovies.value = res.data.value.total_results
 }
@@ -77,7 +78,7 @@ const searchTvAndSeries = async () => {
     return
   }
 
-  series.value = res.data.value.results
+  searchedTvSeries.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
   totalMovies.value = res.data.value.total_results
 }

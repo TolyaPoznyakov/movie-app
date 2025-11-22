@@ -1,9 +1,11 @@
 <template>
   <div>
-    <back-button class="ml-64"/>
-    <movie-description
+    <UContainer>
+      <back-button class="mb-5"/>
+      <movie-description
         v-if="moviesDetails" :movie="moviesDetails"
-    />
+      />
+    </UContainer>
   </div>
 </template>
 

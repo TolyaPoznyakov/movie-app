@@ -23,5 +23,8 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss()
     ]
-  }
+  },
+  plugins: [
+    '~/plugins/moment'
+  ]
 })
