@@ -60,24 +60,7 @@ const genreNames = computed(() =>
 const posterUrl = `https://image.tmdb.org/t/p/w342${props.movie.poster_path}`
 const releaseYear = (props.movie.release_date || props.movie.first_air_date)?.split("-")[0] || ''
 
-
-//
-// const router = useRouter()
-//
-// const handleClick = (id) => {
-//   router.push(`/movies/${id}`)
-// }
-//
-// const handleClick = (id, type) => {
-//   if(type === 'movie') {
-//     router.push(`/movies/${id}`)
-//   } else if(type === 'tv') {
-//     router.push(`/tv-series/${id}`)
-//   }
-// }
-//
 const emit = defineEmits(['click'])
-
 
 </script>
 

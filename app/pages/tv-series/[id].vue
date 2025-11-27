@@ -18,12 +18,12 @@ const route = useRoute()
 const seriesId = route.params.id
 
 const moviesDetails = ref(null)
-const fetchMovies = async ()=>{
+const fetchMovies = async () => {
   const res = await useApiRequest(`/tv/${seriesId}`)
   moviesDetails.value = res.data.value
 }
 
-onMounted(()=>{
+onMounted(() => {
   fetchMovies()
 })
 

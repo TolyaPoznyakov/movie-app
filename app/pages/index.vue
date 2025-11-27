@@ -17,24 +17,7 @@
         placeholder="Search movies..."
         size="xl"
       />
-      <UInputDate ref="inputDateRef" v-model="modelValue" range>
-        <template #trailing>
-          <UPopover :reference="inputDateRef?.inputsRef[0]?.$el">
-            <UButton
-                color="neutral"
-                variant="link"
-                size="sm"
-                icon="i-lucide-calendar"
-                aria-label="Select a date range"
-                class="px-0"
-            />
-
-            <template #content>
-              <UCalendar v-model="modelValue" class="p-2" :number-of-months="2" range />
-            </template>
-          </UPopover>
-        </template>
-      </UInputDate>
+      <DateRangeFilter v-model="dateRange" />
     </div>
     <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
       <MovieCard
@@ -85,23 +68,21 @@ const handleClick = (id, type) => {
   }
 }
 
-const inputDateRef = useTemplateRef('inputDateRef')
-
-const modelValue = shallowRef({
+const dateRange = shallowRef({
   start: null,
   end: null
 })
 
 const startDate = computed(() => $moment({
-  year: modelValue.value.start?.year,
-  month: modelValue.value.start?.month - 1,
-  day: modelValue.value.start?.day
+  year: dateRange.value.start?.year,
+  month: dateRange.value.start?.month - 1,
+  day: dateRange.value.start?.day
 }).format("YYYY-MM-DD"))
 
 const endDate = computed(() => $moment({
-  year: modelValue.value.end?.year,
-  month: modelValue.value.end?.month - 1,
-  day: modelValue.value.end?.day
+  year: dateRange.value.end?.year,
+  month: dateRange.value.end?.month - 1,
+  day: dateRange.value.end?.day
 }).format("YYYY-MM-DD"))
 
 
@@ -152,7 +133,7 @@ watch(search, () => {
 watch(selectedGenres, async () => {
   await fetchMovies()
 })
-watch(modelValue, async () => {
+watch(dateRange, async () => {
   await fetchMovies()
 })
 // TODO: have a look of ASYNC hooks call
