@@ -67,12 +67,12 @@ const props = defineProps({
   }
 })
 
-const title = computed(() => props.movie.title || props.movie.name || 'N/A')
-const originalTitle = computed(() => props.movie.original_title || props.movie.original_name || 'N/A')
-const releaseDate = computed(() => props.movie.release_date || props.movie.first_air_date || 'N/A')
-const runtime = computed(() => props.movie.runtime || props.movie.episode_run_time?.[0] || 'N/A')
-const language = computed(() => (props.movie.original_language || props.movie.languages?.[0] || '').toUpperCase())
-const genres = computed(() => props.movie.genres.map(g => g.name).join(', '))
+const title = computed(() => props.movie.title)
+const originalTitle = computed(() => props.movie.original_title)
+const releaseDate = computed(() => props.movie.release_date)
+const runtime = computed(() => props.movie.runtime)
+const language = computed(() => (props.movie.original_language).toUpperCase())
+const genres = computed(() => props.movie.genres && props.movie.genres.map(g => g.name).join(', '))
 
 const imageUrl = path => path ? `https://image.tmdb.org/t/p/w500${path}` : ''
 

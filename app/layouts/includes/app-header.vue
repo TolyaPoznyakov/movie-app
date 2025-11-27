@@ -1,7 +1,7 @@
 <template>
 <div class="py-5 gap-12 flex justify-center items-center">
   <nuxt-link class="main-btn" to="/">MAIN PAGE</nuxt-link>
-  <nuxt-link class="main-btn" to="/tv-series/tv-series">TV AND SERIES</nuxt-link>
+  <nuxt-link class="main-btn" to="/tv-series">TV AND SERIES</nuxt-link>
 </div>
 </template>
 

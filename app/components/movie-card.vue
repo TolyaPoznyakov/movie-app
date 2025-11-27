@@ -58,7 +58,7 @@ const genreNames = computed(() =>
 
 
 const posterUrl = `https://image.tmdb.org/t/p/w342${props.movie.poster_path}`
-const releaseYear = (props.movie.release_date || props.movie.first_air_date)?.split("-")[0] || ''
+const releaseYear = (props.movie.release_date)?.split("-")[0] || ''
 
 const emit = defineEmits(['click'])
 

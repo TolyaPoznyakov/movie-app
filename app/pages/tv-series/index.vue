@@ -22,7 +22,7 @@
 
     <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
       <movie-card
-        v-for="item in formattedMovieList"
+        v-for="item in formattedSerialsList"
         :key="item.id"
         :movie="item"
         @click="handleClick(item.id, 'tv')"
@@ -87,9 +87,9 @@ const endDate = computed(() => $moment({
 }).format("YYYY-MM-DD"))
 
 
-const moviesList = computed(() => search.value ? searchedTvSeries.value : tvSeries.value)
+const serialsList = computed(() => search.value ? searchedTvSeries.value : tvSeries.value)
 
-const formattedMovieList = computed(() => moviesList.value.map(movie => ({ ...movie, title: movie.name }) ))
+const formattedSerialsList = computed(() => serialsList.value.map(serial => ({ ...serial, release_date: serial.first_air_date, title: serial.name }) ))
 
 const fetchTvAndSeries = async () => {
   const res = await useApiRequest('/discover/tv', {

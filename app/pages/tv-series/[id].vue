@@ -3,7 +3,7 @@
     <UContainer>
       <back-button class="mb-5"/>
       <movie-description
-        v-if="moviesDetails" :movie="moviesDetails"
+        v-if="formattedSerialDetails" :movie="formattedSerialDetails"
       />
     </UContainer>
   </div>
@@ -17,14 +17,24 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const seriesId = route.params.id
 
-const moviesDetails = ref(null)
-const fetchMovies = async () => {
+const formattedSerialDetails = computed(() => serialDetails.value && ({
+  ...serialDetails.value,
+  title: serialDetails.value.name,
+  original_title: serialDetails.value.original_name,
+  release_date: serialDetails.value.first_air_date,
+  runtime: serialDetails.value.episode_run_time?.[0],
+  original_language: serialDetails.value.languages?.[0]
+}))
+
+const serialDetails = ref(null)
+
+const fetchSerial = async () => {
   const res = await useApiRequest(`/tv/${seriesId}`)
-  moviesDetails.value = res.data.value
+  serialDetails.value = res.data.value
 }
 
 onMounted(() => {
-  fetchMovies()
+  fetchSerial()
 })
 
 </script>
