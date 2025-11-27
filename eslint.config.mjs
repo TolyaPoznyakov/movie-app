@@ -7,6 +7,7 @@ export default withNuxt({
     'object-curly-spacing': ['error', 'always'], // відступи в import
     'no-trailing-spaces': 'error', // помилка якщо пробіл в кінці рядка
     'semi': ['error', 'never'], // без крапок з комою
-    'comma-dangle': ['error', 'never'] // без коми після останньої властивості
+    'comma-dangle': ['error', 'never'], // без коми після останньої властивості
+    'arrow-spacing': ['error', { 'before': true, 'after': true }] // пробіли навколо =>
   }
 })

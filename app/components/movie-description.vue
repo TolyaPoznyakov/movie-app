@@ -1,18 +1,18 @@
 <template>
   <div class="movie">
     <div class="px-5">
-      <h1>{{ movie.title }}</h1>
+      <h1 class="text-2xl font-bold">{{ title }}</h1>
       <p class="tagline">
         {{ movie.tagline }}
       </p>
       <ul class="info">
-        <li><strong>Оригінальна назва:</strong> {{ movie.original_title }}</li>
-        <li><strong>Мова:</strong> {{ movie.original_language.toUpperCase() }}</li>
+        <li><strong>Оригінальна назва:</strong> {{ originalTitle }}</li>
+        <li><strong>Мова:</strong> {{ language }}</li>
         <li><strong>Жанри:</strong> {{ genres }}</li>
-        <li><strong>Тривалість:</strong> {{ movie.runtime }} хв</li>
-        <li><strong>Дата релізу:</strong> {{ movie.release_date }}</li>
-        <li><strong>Бюджет:</strong> ${{ formatNumber(movie.budget) }}</li>
-        <li><strong>Касові збори:</strong> ${{ formatNumber(movie.revenue) }}</li>
+        <li><strong>Тривалість:</strong> {{ runtime }} хв</li>
+        <li><strong>Дата релізу:</strong> {{ releaseDate }}</li>
+        <li v-if="movie.budget"><strong>Бюджет:</strong> ${{ formatNumber(movie.budget) }}</li>
+        <li v-if="movie.revenue"><strong>Касові збори:</strong> ${{ formatNumber(movie.revenue) }}</li>
         <li><strong>Рейтинг:</strong> {{ movie.vote_average }} ({{ movie.vote_count }} голосів)</li>
         <li><strong>Статус:</strong> {{ movie.status }}</li>
       </ul>
@@ -67,7 +67,12 @@ const props = defineProps({
   }
 })
 
-const genres = computed(() => props.movie.genres.map(g => g.name).join(', '))
+const title = computed(() => props.movie.title)
+const originalTitle = computed(() => props.movie.original_title)
+const releaseDate = computed(() => props.movie.release_date)
+const runtime = computed(() => props.movie.runtime)
+const language = computed(() => (props.movie.original_language).toUpperCase())
+const genres = computed(() => props.movie.genres && props.movie.genres.map(g => g.name).join(', '))
 
 const imageUrl = path => path ? `https://image.tmdb.org/t/p/w500${path}` : ''
 

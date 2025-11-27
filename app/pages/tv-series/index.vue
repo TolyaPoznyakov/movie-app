@@ -2,14 +2,14 @@
   <div class="w-full px-4">
     <div class="w-full flex justify-center pb-10 gap-4">
       <USelect
-        v-if="movieGenres.length > 0"
-        v-model="selectedGenres"
-        :items="movieGenres"
-        multiple
-        placeholder="Select genre"
-        value-key="id"
-        label-key="name"
-        class="w-[150px]"
+          v-if="tvSeriesGenres.length > 0"
+          v-model="selectedGenres"
+          :items="tvSeriesGenres"
+          multiple
+          placeholder="Select genre"
+          value-key="id"
+          label-key="name"
+          class="w-[150px]"
       />
       <AppInput
         v-model="search"
@@ -19,12 +19,13 @@
       />
       <DateRangeFilter v-model="dateRange" />
     </div>
+
     <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
-      <MovieCard
-        v-for="movie in moviesList"
-        :key="movie.id"
-        :movie="movie"
-        @click="handleClick(movie.id, 'movie')"
+      <movie-card
+        v-for="item in formattedSerialsList"
+        :key="item.id"
+        :movie="item"
+        @click="handleClick(item.id, 'tv')"
       />
     </div>
     <base-pagination
@@ -41,23 +42,23 @@
 <script setup>
 import { useApiRequest } from '~/composables/apiRequest.js'
 import { debounce } from '~/utils/debounce.js'
-import { useMovieGenres } from '~/composables/genres.js'
+import { useTvSeriesGenres } from '~/composables/genres.js'
 
-
-const { fetchGenres } = useMovieGenres()
+const { fetchGenres } = useTvSeriesGenres()
 
 const { $moment } = useNuxtApp()
 
-
-const moviesInCinema = ref(null)
-const movies = ref(null)
+const tvSeries = ref([])
+const searchedTvSeries = ref([])
 const search = ref('')
 const page = ref(1)
 const totalPages = ref(1)
-const movieGenres = ref([])
+const tvSeriesGenres = ref([])
 const selectedGenres = ref([])
 const totalMovies = ref(1)
 const itemsPerPage = 20
+
+
 
 const handleClick = (id, type) => {
   if (type === 'movie') {
@@ -86,44 +87,44 @@ const endDate = computed(() => $moment({
 }).format("YYYY-MM-DD"))
 
 
-const moviesList = computed(() => search.value ? movies.value : moviesInCinema.value)
+const serialsList = computed(() => search.value ? searchedTvSeries.value : tvSeries.value)
 
-const fetchMovies = async () => {
-  const res = await useApiRequest('/discover/movie', {
+const formattedSerialsList = computed(() => serialsList.value.map(serial => ({ ...serial, release_date: serial.first_air_date, title: serial.name }) ))
+
+const fetchTvAndSeries = async () => {
+  const res = await useApiRequest('/discover/tv', {
     query: {
       page: page.value,
       with_genres: selectedGenres.value.join(','),
-      'primary_release_date.gte': startDate.value,
-      'primary_release_date.lte': endDate.value
+      'first_air_date.gte': startDate.value,
+      'first_air_date.lte': endDate.value
     }
   })
-  moviesInCinema.value = res.data.value.results
+  tvSeries.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
   totalMovies.value = res.data.value.total_results
 }
 
-const searchMovies = async () => {
+const searchTvAndSeries = async () => {
   if (!search.value) return
 
-  const res = await useApiRequest('/search/movie', {
+  const res = await useApiRequest('/search/tv', {
     query: {
       query: search.value,
       page: page.value
     }
   })
 
-
-
   if (!res.data.value) {
     return
   }
 
-  movies.value = res.data.value.results
+  searchedTvSeries.value = res.data.value.results
   totalPages.value = res.data.value.total_pages
   totalMovies.value = res.data.value.total_results
 }
 
-const debouncedSearch = debounce(searchMovies, 800)
+const debouncedSearch = debounce(searchTvAndSeries, 800)
 
 watch(search, () => {
   page.value = 1
@@ -131,15 +132,16 @@ watch(search, () => {
 })
 
 watch(selectedGenres, async () => {
-  await fetchMovies()
+  await fetchTvAndSeries()
 })
+
 watch(dateRange, async () => {
-  await fetchMovies()
+  await fetchTvAndSeries()
 })
-// TODO: have a look of ASYNC hooks call
+
 onMounted(async () => {
-  await fetchMovies()
-  movieGenres.value = await fetchGenres()
+  await fetchTvAndSeries()
+  tvSeriesGenres.value = await fetchGenres()
 })
 
 const nextPage = async () => {
@@ -157,8 +159,8 @@ const prevPage = async () => {
 }
 
 const updateMovies = async () => {
-  if (search.value) await searchMovies()
-  else await fetchMovies()
+  if (search.value) await searchTvAndSeries()
+  else await fetchTvAndSeries()
 }
 </script>
 
