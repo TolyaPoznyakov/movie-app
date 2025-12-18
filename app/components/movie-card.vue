@@ -1,5 +1,5 @@
 <template>
-  <div class="movie-card" @click="handleClick(movie.id)">
+  <div class="movie-card" @click="emit('click')">
     <div class="movie-card-inner">
       <div class="movie-card-front">
         <img :src="posterUrl" :alt="movie.title">
@@ -19,7 +19,6 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
 
 
 const props = defineProps({
@@ -59,13 +58,9 @@ const genreNames = computed(() =>
 
 
 const posterUrl = `https://image.tmdb.org/t/p/w342${props.movie.poster_path}`
-const releaseYear = props.movie.release_date.split("-")[0]
+const releaseYear = (props.movie.release_date)?.split("-")[0] || ''
 
-
-const router = useRouter()
-const handleClick = (id) => {
-  router.push(`/movies/${id}`)
-}
+const emit = defineEmits(['click'])
 
 </script>
 
